@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Register"; //最上面頁籤NAME
+    var LoginData = new RegisterModel(); //後端值要傳入前端的容器
+
+}
+
+<html lang="zh-Hant">
+</html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <title>LOGIN</title>
+    <meta name="robots" content="index,follow">
+    <meta name="description" content="登入系統">
+    <meta name="theme-color" content="#4285f4">
+    <base target="_blank">
+</head>
+<body>
+    <div>
+        <h1 class="heading">註冊</h1>
+        <form method="post" asp-controller="Register" asp-action="regist">
+            <p><h3>帳號:</h3> <input id="account" required placeholder="請輸入帳號" name="Account" value="@LoginData.Account"> </p>
+            <p><h3>密碼:</h3> <input id="password" required placeholder="請輸入密碼" name="Password" type="password" value="@LoginData.Password"></p>
+            <p><h3>姓名:</h3> <input id="name" name="name" value="@LoginData.Name"></p>
+            <p><h3>電話:</h3> <input id="phone" name="phone" value="@LoginData.Phone"></p>
+            <button id="submit">送出</button>
+        </form>
+
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    
+}
+@model List<Logintable> //後端回傳list(要注意同個類型才能對應到)
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <title>LOGIN</title>
+    <meta name="robots" content="index,follow">
+    <meta name="description" content="登入系統">
+    <meta name="theme-color" content="#4285f4">
+    <base target="_blank">
+</head>
+
+<body>
+    <form method="post" asp-controller="Home" asp-action="SelectView"> <!--前端打到後面才需要-->
+        <select name="accountlist" id="accountlist">
+            <option label="請選擇帳號"></option>
+            @foreach (var item in Model)
+            {
+                <option name="@item.Name" value="@item.RowId">@item.Account</option>
+            }
+        </select>
+     
+         
+    </form>
+
+   
+
+    <pre>
+    <form method="post" asp-controller="Home" asp-action="Index">
+        <table id="grid1" >
+            <thead>
+                <th>帳號</th>
+                <th>密碼</th>
+                <th>電話</th>
+                <th>姓名</th>
+            </thead>
+       
+        <tbody>
+            @foreach(var item1 in Model)
+            {
+            <tr>
+                <td>@item1.Account</td>
+                <td>@item1.Password</td>
+                <td>@item1.Phone</td>
+                <td>@item1.Name</td>
+            </tr>
+            }
+        </tbody>
+ </table>
+    </form>
+    </pre>
+
+    @section Scripts{
+        @*套用到_Layout.cshtml的RenderSectionAsync*@
+        <script>
+
+        $("#accountlist").change(function () {  //$--ajax用法("#id")
+
+        var data = { "id": $(this).val() }; //取id的值
+
+        $.ajax({
+        method: "post",
+        url: "@Url.Action("DoSomething")", 
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        dataType: "json",//跟後端資料類型要一樣
+        data: data,
+        success: function (result) {
+
+
+        var json = $.parseJSON(result);
+
+        $("#grid1 > tbody").empty();
+
+        $.each(json,function(i,item){
+                            $("#grid1 > tbody").append("<tr><td>" + item.Account + "</td><td>" + item.Password + "</td><td>" + item.Phone + "</td><td>" + item.Name + "</td></tr>");
+    });
+    },
+    error: function (xhr, status, err) {
+    alert(err);
+    }
+    });
+    });
+        </script>
+}
+
+    
+</body>
+</html>
