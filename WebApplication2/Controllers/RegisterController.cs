@@ -3,11 +3,11 @@ using WebApplication2.Models;
 
 namespace WebApplication2.Controllers
 {
-    
+
     public class RegisterController : Controller
     {
         readonly LoginContext _loginContext;
-        public RegisterController(LoginContext loginContext) //注入服務
+        public RegisterController(LoginContext loginContext) 
         {
             _loginContext = loginContext;
         }
@@ -17,32 +17,31 @@ namespace WebApplication2.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult regist([FromBody] RegisterModel model)
+        public IActionResult regist(RegisterModel model)
         {
-           
-            var registEnd = _loginContext.Logintables.Where(w => model.Account == w.Account).ToList();//把where拿掉很多比
+
+            var registEnd = _loginContext.Logintables.Where(w => model.Account == w.Account).ToList();
             if (registEnd.Count > 0)
             {
-                return Ok(false);
+                return Ok("已註冊過");
             }
             else
             {
-             Logintable data = new Logintable(); //實體化table
-            data.Account = model.Account;  //將前端傳進來的model值帶進data(資料庫中)
-            data.Password = model.Password;
-            data.Name = model.Name;
-            data.Phone = model.Phone;
+                Logintable data = new Logintable(); 
+                data.Account = model.Account;  
+                data.Password = model.Password;
+                data.Name = model.Name;
+                data.Phone = model.Phone;
 
 
-            _loginContext.Add(data); //ef core新增資料
-            _loginContext.SaveChanges(); //更新資料
+                _loginContext.Add(data); 
+                _loginContext.SaveChanges(); 
 
-                return Ok(true);
+                return RedirectToAction("loginIndex", "login");
             }
 
-            
-                        
+
+
         }
 
     }

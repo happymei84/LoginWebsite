@@ -7,10 +7,11 @@ namespace WebApplication2.Controllers
     public class HomeController : Controller
     {
         readonly LoginContext _loginContext;
-        public HomeController(LoginContext loginContext) //注入服務
+        public HomeController(LoginContext loginContext) 
         {
             _loginContext = loginContext;
         }
+
         public IActionResult Index()
         {
 
@@ -20,59 +21,32 @@ namespace WebApplication2.Controllers
             ViewBag.abc = getaccount1;
 
             return View(getaccount);
-                                  
+
 
         }
 
-        public IActionResult SelectView(IFormCollection form) //傳入form 裡面全部的Control的值
+        //下拉式選單，查看使用者資訊
+        public IActionResult SelectView(IFormCollection form) 
         {
-            var compare = form["accountlist"].ToString(); //使用accountlist(這個controller)
+            var compare = form["accountlist"].ToString(); 
             var compareModel = _loginContext.Logintables.Where(w => compare == w.RowId.ToString()).FirstOrDefault();
-            if(compareModel != null)
+            if (compareModel != null)
             {
                 ViewBag.output = compareModel;
-                 
+
             }
-           
+
             return View();
         }
 
         [HttpPost]
         public JsonResult DoSomething(int id)
         {
-           
+
             var compareModel = _loginContext.Logintables.Where(w => id == w.RowId).ToList();
             var result = JsonConvert.SerializeObject(compareModel);
             return Json(result);
         }
-
-        [HttpPost]
-        public IActionResult SearchFunction(string model)
-        {
-            var result = new APIResponseModel<List<Articletable>>();
-
-            var compare = _loginContext.Articletables.Where(w => w.PostTitle.Contains(model)).ToList();
-
-            if (compare.Count > 0)
-            {
-                result.SusseccStatus = true;
-                result.ReturnData = compare;
-                result.ReturnMessage = "success";
-            }
-            else
-            {
-                result.SusseccStatus = false;
-                result.ReturnData = compare;
-                result.ReturnMessage = "fail";
-            }
-
-
-
-
-            return Ok(result);
-        }
-
-
 
     }
 }

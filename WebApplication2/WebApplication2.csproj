@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\Class.cs" />
+    <Compile Remove="Controllers\ContentController .cs" />
+    <Compile Remove="Models\APIResponseModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
